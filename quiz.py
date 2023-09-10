@@ -1,5 +1,6 @@
 import streamlit as st
 from questions import quizzes
+from datetime import datetime
 import random
 import pandas as pd
 import time
@@ -16,9 +17,10 @@ class User:
         self.name = ""
         self.last_name = ""
         self.logged_in = False
+        self.usr_key = ""
 
     def get_user_info(self):
-        usr = self.all_users_df[self.all_users_df["login"] == self.login]
+        usr = self.all_users_df[self.all_users_df["login"] == self.usr_key]
         usr = usr.iloc[0].to_dict()
         self.name = usr["name"]
         self.first_name = usr["first_name"]
@@ -36,7 +38,7 @@ class User:
         if st.button("Login"):
             if check_password(login, pwd):
                 self.logged_in = True
-                self.login = login
+                self.usr_key = login
                 self.get_user_info()
                 st.success(f"Willkommen {self.first_name} beim StatA Quiz")
             else:
@@ -91,14 +93,23 @@ class Quiz:
         )
         if st.button("Quiz Starten"):
             self.quiz_id = id
-
+    
+    def save_quiz(self, count):
+        line = f"""{self.user.usr_key},{self.quiz_id},{datetime.now()},{count},{NUM_QUESTIONS * REQUIRED},{count >= NUM_QUESTIONS * REQUIRED}\n"""
+        with open(RESULT_FILE, 'a') as file:
+            file.write(line)
+    
     def show_correct_answers(self):
-        st.subheader("Folgende Fragen wruden von dir falsch beantwortet:")
-        st.markdown("❌ deine falsche Antwort")
-        st.markdown("✔️ richtige Antwort\n")
+        st.subheader("Folgende Fragen wurden von dir falsch beantwortet:")
+        st.markdown("""Untenstehend werden alle Fragen aufgelistet, welche von dir falsch beantwortet 
+                    wurden. Deine Antwort ist mit einem ❌, die richtige Antwort mit einem ✔️ gekennzeichnet. 
+                    Wo vorhanden, verlinkt das 🔗-Symbol rechts von der Frage mit weiteren Infos betreffend diese Frage.\n\n
+                    """)
+
         for question in self.questions:
-            st.markdown(f"*{question['q']}*")
             if question["user"] != question["r"]:
+                link = f"[🔗]({question['url']})" if "url" in question else ""
+                st.markdown(f"**{question['q']}** {link}")
                 for key, value in question["a"].items():
                     if key == question["user"] and key != question["r"]:
                         mark = "❌ "
@@ -107,8 +118,7 @@ class Quiz:
                     else:
                         mark = "⚪ "
                     st.markdown(mark + value)
-            if "url" in question:
-                st.markdown(f"[Weitere Infos]({question['url']})")
+            
             st.markdown("")
 
     def show_result(self):
@@ -116,13 +126,14 @@ class Quiz:
         st.markdown(f"Deine Punktezahl: {count}/{NUM_QUESTIONS}")
         if count / NUM_QUESTIONS < REQUIRED:
             st.warning(
-                "Leider hat es diesmal nicht gereicht, bitte versuch es nochmals."
+                "Leider hat es diesmal nicht gereicht, überprüfe bitte deine falschen Antworten im untenstehenden Abschnitt und versuche es anschliessend nochmals."
             )
             self.index = 0
             self.finished = False
         else:
             st.success("Herzliche Gratulation, du hast den Test bestanden")
             st.balloons()
+        self.save_quiz(count)
 
         if count < NUM_QUESTIONS:
             self.show_correct_answers()
@@ -136,10 +147,15 @@ class Quiz:
 
             st.subheader(f"Frage {self.index + 1}")
             st.markdown(self.question["q"])
+            response_options = list(self.question["a"].keys())
+            if "user" not in self.question:
+                self.question["user"] = "A"
+            id = response_options.index(self.question["user"])
             response = st.radio(
                 "Antwort",
-                options=list(self.question["a"].keys()),
+                options=response_options,
                 format_func=self.question["a"].get,
+                index=id
             )
             self.question["user"] = response
             self.answers[self.index] = {"user": response, "result": self.question["r"]}

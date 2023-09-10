@@ -103,11 +103,13 @@ quizzes = {
                     "D": "Ein Typ von Malware",
                 },
                 "r": "C",
+                "url": "https://de.wikipedia.org/wiki/Firewall"
             },
             {
                 "q": "Welche Art von Malware verbirgt ihre Existenz auf dem infizierten System?",
                 "a": {"A": "Wurm", "B": "Trojaner", "C": "Ransomware", "D": "Rootkit"},
                 "r": "D",
+                "url": "https://de.wikipedia.org/wiki/Rootkit"
             },
             {
                 "q": "Was sollte man regelmäßig tun, um Software-Schwachstellen zu minimieren?",
@@ -128,6 +130,7 @@ quizzes = {
                     "D": "Ein Virenscan",
                 },
                 "r": "C",
+                "url": "https://de.wikipedia.org/wiki/Phishing"
             },
             {
                 "q": "Welche Methode wird oft verwendet, um Passwörter zu knacken?",
@@ -138,6 +141,7 @@ quizzes = {
                     "D": "Malvertising",
                 },
                 "r": "B",
+                "url": "https://de.wikipedia.org/wiki/Brute-Force-Methode"
             },
             {
                 "q": "Was ist ein VPN?",
@@ -148,6 +152,7 @@ quizzes = {
                     "D": "Ein Vektor-Pixel-Netzwerk",
                 },
                 "r": "B",
+                "url": "https://de.wikipedia.org/wiki/Virtual_Private_Network"
             },
             {
                 "q": "Welche Art von Angriff tritt auf, wenn ein Angreifer den Datenverkehr zwischen zwei Parteien abfängt?",
@@ -158,6 +163,7 @@ quizzes = {
                     "D": "Denial-of-Service",
                 },
                 "r": "A",
+                "url": "https://de.wikipedia.org/wiki/Man-in-the-Middle-Angriff"
             },
             {
                 "q": "Was ist die Hauptfunktion einer Firewall?",
@@ -198,6 +204,7 @@ quizzes = {
                     "D": "Ein Login, der zwei Mal durchgeführt werden muss",
                 },
                 "r": "C",
+                "url": "https://de.wikipedia.org/wiki/Zwei-Faktor-Authentisierung"
             },
         ],
     },

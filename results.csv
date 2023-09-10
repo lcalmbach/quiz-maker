@@ -1,1 +1,5 @@
-user_id,quiz_id,date,result
+user_id,quiz_id,date,count_correct,count_required,result
+ssscal,1,2023-09-10 18:27:45.661369,5,8.0,False
+ssscal,1,2023-09-10 18:29:07.064403,6,8.0,False
+ssscal,1,2023-09-10 18:30:44.161532,9,8.0,True
+ssscal,1,2023-09-10 18:32:52.148347,10,8.0,True
